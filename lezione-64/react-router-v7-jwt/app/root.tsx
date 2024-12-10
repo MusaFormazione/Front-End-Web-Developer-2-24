@@ -46,11 +46,12 @@ export default function App() {
   return <Outlet />;
 }
 
+// ErrorBoundary è un componente che viene renderizzato quando si verifica un errore durante la navigazione
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let message = "Oops!";
   let details = "An unexpected error occurred.";
   let stack: string | undefined;
-
+  // se l'errore è una risposta di errore 404, possiamo mostrare un messaggio più specifico
   if (isRouteErrorResponse(error)) {
     message = error.status === 404 ? "404" : "Error";
     details =

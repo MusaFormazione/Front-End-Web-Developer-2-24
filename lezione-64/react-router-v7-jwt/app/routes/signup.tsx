@@ -2,6 +2,7 @@ import { Form, redirect, useActionData, useNavigation } from "react-router";
 import type { Route } from "../+types/root";
 import axios from "axios";
 
+// la pagina di signup è molto simile a quella di login: leggi i commenti in login.tsx per capire come funziona
 export default function Signup() {
   const navigation = useNavigation();
   const serverResponseData = useActionData();

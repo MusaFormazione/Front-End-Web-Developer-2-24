@@ -4,7 +4,9 @@ import axios from "axios";
 
 export default function Login() {
   const navigation = useNavigation();
+  // useActionData ci permette di ottenere i dati dell'azione, ad esempio l'errore
   const serverResponseData = useActionData();
+  // se lo stato di navigazione non è "idle", vuol dire che c'è una richiesta in corso
   const isSubmitting = navigation.state !== "idle";
 
   return (
@@ -27,6 +29,7 @@ export default function Login() {
             className="border-2 p-2 border-gray-300 border-solid"
           />
         </label>
+        {/* in caso di errore, qui viene mostrato l'avviso */}
         {serverResponseData && serverResponseData.error && (
           <h3 className="text-red-500 p-8">{serverResponseData.error}</h3>
         )}
@@ -60,11 +63,14 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
     // In pratica: prendo la data attuale, la converto in millisecondi, aggiungo un'ora.
     let hourInMillis = 1000 * 60 * 60;
     let tokenExpirationMillis = new Date().getTime() + hourInMillis;
+    // Salvo il timestamp di scadenza del token in localStorage, così posso controllare se il token è scaduto
     localStorage.setItem("expirationMillis", tokenExpirationMillis.toString());
 
     return redirect("/tasks");
   } catch (error) {
+    // se la richiesta fallisce, mostriamo l'errore all'utente
     if (axios.isAxiosError(error) && error.response?.status === 401) {
+      // se la richiesta fallisce, mostriamo l'errore all'utente
       return error.response.data;
     }
     console.error(error);
